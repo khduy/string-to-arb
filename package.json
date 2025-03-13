@@ -1,0 +1,80 @@
+{
+  "name": "string-to-arb-extractor",
+  "displayName": "String to ARB Extractor",
+  "description": "Extracts strings to an ARB file and replaces them with a prefixed key",
+  "version": "0.0.1",
+  "publisher": "khduy",
+  "license": "MIT",
+  "icon": "icons/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khduy/string-to-arb-extractor"
+  },
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:plaintext",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:dart"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "String to ARB Extractor",
+      "properties": {
+        "stringToArbExtractor.arbFilePath": {
+          "type": "string",
+          "default": "./lib/l10n/app_en.arb",
+          "description": "Path to the ARB file where strings will be extracted."
+        },
+        "stringToArbExtractor.prefix": {
+          "type": "string",
+          "default": "intl",
+          "description": "Prefix for the extracted key (e.g., intl.keyName)."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "string-to-arb-extractor.extractString",
+        "title": "Extract String to ARB"
+      }
+    ],
+    "codeActions": [
+      {
+        "kind": "quickfix",
+        "title": "Extract String to ARB",
+        "languages": [
+          "plaintext",
+          "javascript",
+          "typescript",
+          "dart"
+        ],
+        "command": "string-to-arb-extractor.extractString"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "package": "npx vsce package"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^18.x",
+    "@types/vscode": "^1.87.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "esbuild": "^0.25.1",
+    "eslint": "^8.56.0",
+    "vsce": "^2.15.0"
+  }
+}
