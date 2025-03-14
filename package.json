@@ -2,7 +2,7 @@
   "name": "string-to-arb-extractor",
   "displayName": "String to ARB Extractor",
   "description": "Extracts strings to an ARB file and replaces them with a prefixed key",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "khduy",
   "license": "MIT",
   "icon": "icons/icon.png",
@@ -27,10 +27,30 @@
     "configuration": {
       "title": "String to ARB Extractor",
       "properties": {
-        "stringToArbExtractor.arbFilePath": {
+        "stringToArbExtractor.arbFolderPath": {
           "type": "string",
-          "default": "./lib/l10n/app_en.arb",
-          "description": "Path to the ARB file where strings will be extracted."
+          "default": "./lib/l10n",
+          "description": "Path to the folder containing ARB files for extraction and translation."
+        },
+        "stringToArbExtractor.sourceLanguage": {
+          "type": "string",
+          "default": "en",
+          "description": "Source language code (e.g., 'en' for English)."
+        },
+        "stringToArbExtractor.fileNamePattern": {
+          "type": "string",
+          "default": "intl_{lang}.arb",
+          "description": "Pattern for ARB file names. Use {lang} as a placeholder for the language code."
+        },
+        "stringToArbExtractor.autoTranslate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically translate extracted strings to target languages."
+        },
+        "stringToArbExtractor.geminiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Gemini API key for translation."
         },
         "stringToArbExtractor.prefix": {
           "type": "string",
@@ -43,21 +63,21 @@
       {
         "command": "string-to-arb-extractor.extractString",
         "title": "Extract String to ARB"
+      },
+      {
+        "command": "string-to-arb-extractor.extractStringFromContext",
+        "title": "Extract String to ARB"
       }
     ],
-    "codeActions": [
-      {
-        "kind": "quickfix",
-        "title": "Extract String to ARB",
-        "languages": [
-          "plaintext",
-          "javascript",
-          "typescript",
-          "dart"
-        ],
-        "command": "string-to-arb-extractor.extractString"
-      }
-    ]
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection && (editorLangId == 'dart' || editorLangId == 'javascript' || editorLangId == 'typescript')",
+          "command": "string-to-arb-extractor.extractStringFromContext",
+          "group": "1_modification"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
