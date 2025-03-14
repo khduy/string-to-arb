@@ -352,7 +352,7 @@ Input string: "${arbText}"`;
   // Register the code action provider (as a refactoring action instead of quickfix)
   context.subscriptions.push(
     vscode.languages.registerCodeActionsProvider(
-      ['plaintext', 'javascript', 'typescript', 'dart'],
+      ['dart'],
       new ExtractStringRefactoringProvider(),
       {
         providedCodeActionKinds: [vscode.CodeActionKind.Refactor],

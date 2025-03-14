@@ -17,9 +17,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:plaintext",
-    "onLanguage:javascript",
-    "onLanguage:typescript",
     "onLanguage:dart"
   ],
   "main": "./out/extension.js",
@@ -54,8 +51,8 @@
         },
         "stringToArbExtractor.prefix": {
           "type": "string",
-          "default": "intl",
-          "description": "Prefix for the extracted key (e.g., intl.keyName)."
+          "default": "S.current",
+          "description": "Prefix for the extracted key (e.g., S.current.keyName)."
         }
       }
     },
@@ -72,7 +69,7 @@
     "menus": {
       "editor/context": [
         {
-          "when": "editorHasSelection && (editorLangId == 'dart' || editorLangId == 'javascript' || editorLangId == 'typescript')",
+          "when": "editorHasSelection && editorLangId == 'dart'",
           "command": "string-to-arb-extractor.extractStringFromContext",
           "group": "1_modification"
         }

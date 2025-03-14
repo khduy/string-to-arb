@@ -1,83 +1,51 @@
-# String to ARB Extractor - Usage Tutorial
+# String to ARB Extractor
 
-This VS Code extension helps you extract strings from your Flutter/Dart code into ARB files for internationalization. It also supports auto-translation to multiple languages using the Gemini API. Follow this guide to get started!
+A VS Code extension that helps you extract strings from your Dart code into ARB files for internationalization.
 
-## Config (settings.json)
-- ARB Folder Path: `"stringToArbExtractor.arbFolderPath": "./lib/l10n"`,
-- Source Language: `"stringToArbExtractor.sourceLanguage": "en"`,
-- File Name Pattern: `"stringToArbExtractor.fileNamePattern": "intl_{lang}.arb"`,
-- Auto Translate: `"stringToArbExtractor.autoTranslate": true`,
-- Gemini API Key: `"stringToArbExtractor.geminiApiKey": "YOUR_API_KEY_HERE"`,
-- Prefix: `"stringToArbExtractor.prefix": "S.current"`
+## Features
 
-## How to Use String Extraction
+- Extract strings from Dart code to ARB files
+- Automatically detect and handle Dart string interpolation
+- Support for both single and double quotes
+- Auto-translation using Gemini API
+- Automatic detection of target languages
+- Customizable file name patterns
+- Option to enable/disable auto-translation
 
-### Step 1: Select a String
-- Open a Dart file in VS Code.
-- Highlight a string, with or without quotes.  
-  **Example**: `'Không tìm thấy đơn hàng ${data.data.order.code}'`
+## Requirements
 
-### Step 2: Trigger the Extraction
-- **Option 1**: Press `Cmd + .` (Mac) or `Ctrl + .` (Windows/Linux), then select "Extract String to ARB" from the Refactoring menu.
-- **Option 2**: Right-click on your selection and choose "Extract String to ARB" from the context menu.
-- **Option 3**: Open the Command Palette (`Cmd + Shift + P` or `Ctrl + Shift + P`), type "Extract String to ARB", and select it.
+- VS Code version 1.87.0 or higher
+- Gemini API key (for translation feature)
 
-### Step 3: Enter a Key
-- A prompt will appear: "Enter a key for the extracted string".
-- Type a descriptive key (e.g., `orderNotFound`) and press Enter.
+## Extension Settings
 
-### Step 4: Handle Duplicates (If Prompted)
-- **If the Key Already Exists**:  
-  - You'll see: `Key "orderNotFound" already exists with value "Order not found". What would you like to do?`  
-  - Choose:  
-    - **Use existing key**: Uses the current key and skips adding a new entry.  
-    - **Add as new key with suffix**: Creates a new key like `orderNotFound_1`.  
+This extension contributes the following settings:
 
-- **If the String Already Exists**:  
-  - You'll see: `The string "Không tìm thấy đơn hàng {code}" already exists as "existing". What would you like to do?`  
-  - Choose:  
-    - **Use existing key**: Reuses the existing key (e.g., `existing`).  
-    - **Add as new key anyway**: Adds your new key (e.g., `orderNotFound`).
+* `stringToArbExtractor.arbFolderPath`: Path to the folder containing ARB files for extraction and translation.
+* `stringToArbExtractor.sourceLanguage`: Source language code (e.g., 'en' for English).
+* `stringToArbExtractor.fileNamePattern`: Pattern for ARB file names. Use {lang} as a placeholder for the language code.
+* `stringToArbExtractor.autoTranslate`: Automatically translate extracted strings to target languages.
+* `stringToArbExtractor.geminiApiKey`: Gemini API key for translation.
+* `stringToArbExtractor.prefix`: Prefix for the extracted key (e.g., S.current.keyName).
 
-### Step 5: Check the Result
-- **Code**: The selected string is replaced with a reference.  
-  **Example**: `S.current.orderNotFound(data.data.order.code)`
-- **ARB File**: The string is added to your ARB file based on your source language and file pattern (default: `./lib/l10n/intl_en.arb`).  
-  **Example**:  
-  ```json
-  {
-    "orderNotFound": "Không tìm thấy đơn hàng {code}"
-  }
-  ```
-
-## Auto-Translation
+## Usage
 
 ### Step 1: Configure Settings
+- Set your ARB folder path: `"stringToArbExtractor.arbFolderPath": "./lib/l10n"`
+- Set your source language: `"stringToArbExtractor.sourceLanguage": "en"`
+- Set your file name pattern: `"stringToArbExtractor.fileNamePattern": "intl_{lang}.arb"`
 - Enable or disable auto-translation: `"stringToArbExtractor.autoTranslate": true` (enabled by default)
-- Set your Gemini API key in settings: `"stringToArbExtractor.geminiApiKey": "YOUR_API_KEY_HERE"`.
-- Configure source language: `"stringToArbExtractor.sourceLanguage": "en"`.
-- Set the ARB folder path: `"stringToArbExtractor.arbFolderPath": "./lib/l10n"`.
-- Set the file name pattern: `"stringToArbExtractor.fileNamePattern": "intl_{lang}.arb"`.
+- Set your Gemini API key: `"stringToArbExtractor.geminiApiKey": "YOUR_API_KEY_HERE"`
+- Set your prefix: `"stringToArbExtractor.prefix": "S.current"`
 
-### Step 2: Create Target Language Files (Optional)
-- The extension will automatically detect target language files in your ARB folder.
-- Files must follow your fileNamePattern with language codes replacing the `{lang}` placeholder.
-- If no target language files are found, the extension will prompt you to create one.
+### Step 2: Extract a String
+1. Select a string in your Dart code
+2. Press `Cmd + .` (Mac) or `Ctrl + .` (Windows/Linux), then select "Extract String to ARB" from the Refactoring menu
+3. Enter a key for the string (e.g., `orderNotFound`)
+4. The string will be extracted to your ARB file and replaced with a reference
 
-### Step 3: Translation Process
-- When you extract a string and auto-translation is enabled, the extension will automatically:
-  1. Add the string to your source language ARB file
-  2. Detect all target language files in your ARB folder
-  3. Translate the string to each target language
-  4. Add the translations to the respective ARB files
-- If auto-translation is disabled, only step 1 will be performed.
-
-### Step 4: Check Results
-- The extension will create or update ARB files for each target language in your ARB folder.
-- The naming pattern follows your fileNamePattern setting (default: `intl_{lang}.arb`).
 
 ## Notes on Translation
 - The extension uses the Gemini API (gemini-2.0-flash model) to translate strings.
 - Placeholders in the format `{variable}` are preserved in translations.
 - Target languages are automatically detected from existing ARB files in your folder.
-- Auto-translation can be turned off if you prefer to manage translations manually.  
