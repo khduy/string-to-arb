@@ -1,8 +1,8 @@
 {
   "name": "string-to-arb-extractor",
   "displayName": "String to ARB Extractor",
-  "description": "Extracts strings to an ARB file and replaces them with a prefixed key",
-  "version": "0.0.2",
+  "description": "Extracts string literals to Flutter ARB files, optionally translates them using Gemini, and replaces the string with a localization key.",
+  "version": "0.2.0",
   "publisher": "khduy",
   "license": "MIT",
   "icon": "icons/icon.png",
@@ -14,6 +14,7 @@
     "vscode": "^1.87.0"
   },
   "categories": [
+    "Programming Languages",
     "Other"
   ],
   "activationEvents": [
@@ -22,48 +23,65 @@
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
-      "title": "String to ARB Extractor",
+      "title": "ARB Extractor",
       "properties": {
         "stringToArbExtractor.arbFolderPath": {
           "type": "string",
           "default": "./lib/l10n",
-          "description": "Path to the folder containing ARB files for extraction and translation."
+          "description": "Path relative to the workspace root where ARB files are stored (e.g., './lib/l10n')."
         },
         "stringToArbExtractor.sourceLanguage": {
           "type": "string",
           "default": "en",
-          "description": "Source language code (e.g., 'en' for English)."
+          "description": "The language code (e.g., 'en', 'es') of the source ARB file used as the base for extraction and translation."
         },
         "stringToArbExtractor.fileNamePattern": {
           "type": "string",
           "default": "intl_{lang}.arb",
-          "description": "Pattern for ARB file names. Use {lang} as a placeholder for the language code."
-        },
-        "stringToArbExtractor.autoTranslate": {
-          "type": "boolean",
-          "default": true,
-          "description": "Automatically translate extracted strings to target languages."
-        },
-        "stringToArbExtractor.geminiApiKey": {
-          "type": "string",
-          "default": "",
-          "description": "Gemini API key for translation."
+          "description": "Filename pattern for ARB files. Must include '{lang}' as the placeholder for the language code (e.g., 'app_{lang}.arb', '{lang}.arb')."
         },
         "stringToArbExtractor.prefix": {
           "type": "string",
           "default": "S.current",
-          "description": "Prefix for the extracted key (e.g., S.current.keyName)."
+          "description": "The prefix used when replacing the selected string in Dart code (e.g., 'S.current', 'context.l10n', 'AppLocalizations.of(context)!')."
+        },
+        "stringToArbExtractor.autoTranslate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic translation of the extracted string to other detected ARB language files using the configured Gemini API Key."
+        },
+        "stringToArbExtractor.geminiApiKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your Google AI Gemini API Key for auto-translation. **Security Note:** Storing keys directly in `settings.json` can be insecure, especially in shared projects. Consider using VS Code's Secret Storage API, environment variables, or ensuring `settings.json` is in your `.gitignore`."
+        },
+        "stringToArbExtractor.importStatement": {
+          "type": "string",
+          "default": "",
+          "description": "(Optional) The full import statement (e.g., 'import \\'package:my_app/l10n/l10n.dart\\';') required for the prefix. If provided, the extension will attempt to add it to the Dart file if missing after extraction. Leave empty to disable this feature."
+        },
+        "stringToArbExtractor.postExtractionCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Command to execute in the workspace root after successfully extracting/updating ARB files (e.g., 'flutter gen-l10n'). Leave empty to disable."
         }
       }
     },
     "commands": [
       {
         "command": "string-to-arb-extractor.extractString",
-        "title": "Extract String to ARB"
+        "title": "ARB: Extract String",
+        "category": "ARB Extractor"
       },
       {
         "command": "string-to-arb-extractor.extractStringFromContext",
-        "title": "Extract String to ARB"
+        "title": "ARB: Extract String (Context Menu Action)",
+        "category": "ARB Extractor"
+      },
+      {
+        "command": "string-to-arb-extractor.openSettings",
+        "title": "ARB: Open Extractor Settings",
+        "category": "ARB Extractor"
       }
     ],
     "menus": {
