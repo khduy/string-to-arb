@@ -2,7 +2,7 @@
   "name": "string-to-arb-extractor",
   "displayName": "String to ARB Extractor",
   "description": "Extracts string literals to Flutter ARB files, optionally translates them using Gemini, and replaces the string with a localization key.",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "publisher": "khduy",
   "license": "MIT",
   "icon": "icons/icon.png",
